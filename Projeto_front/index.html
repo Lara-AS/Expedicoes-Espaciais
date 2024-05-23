@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,
+    initial-scale=1.0">
+    <title>Sistema de Gerenciamento de Expedições Espaciais</title>
+</head>
+<body>
+    <h2>Insira as informações da expedição</h2>
+    <form id="meuFormulario">
+
+        <label for="id">ID:</label><br>
+        <input type="number" id="id" name="id"><br><br>
+        <label for="nome">Nome:</label><br>
+        <input type="text" id="nome" name="nome"><br>
+        <label for="data">Data:</label><br>
+        <input type="date" id="data" name="data"><br><br>
+        <label for="destino">Destino:</label><br>
+        <input type="text" id="destino" name="destino"><br><br>
+        <label for="estado">Estado:</label><br>
+        <input type="text" id="estado" name="estado"><br><br>
+        <label for="tripulacao">Tripulação:</label><br>
+        <input type="text" id="tripulacao" name="tripulacao"><br><br>
+        <label for="carga">Carga:</label><br>
+        <input type="text" id="carga" name="carga"><br><br>
+        <label for="duracao">Duração:</label><br>
+        <input type="date" id="duracao" name="duracao"><br><br>
+        <label for="custo">Custo:</label><br>
+        <input type="float" id="custo" name="custo"><br><br>
+        <label for="status">Status:</label><br>
+        <input type="text" id="status" name="status"><br><br>
+
+        <button type="submit">Enviar</button>
+        <button type="button" id="btnAtualizar">Atualizar</button>
+        <button type="button" id="btnDeletar">Deletar</button>
+
+    </form>
+    <div id="resposta"></div>
+    <script src="main.js"></script>
+</body>    
+</html>
