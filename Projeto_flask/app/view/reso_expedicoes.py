@@ -29,8 +29,8 @@ argumentos_update.add_argument('status', type = str)
 argumentos_delete = reqparse.RequestParser()
 argumentos_delete.add_argument('id', type = int)
 
-argumentos_buscar = reqparse.RequestParser()
-argumentos.add_argument('id', type = int)
+args = reqparse.RequestParser()
+args.add_argument('id', type = int)
 
 class Index(Resource):
     def get(self):
@@ -39,22 +39,16 @@ class Index(Resource):
 class ExpedicaoByid(Resource):
     def get(self):
         try:
-            datas = argumentos_buscar.parse_args()
-            if 'id' in datas:
-                expedicoes = Expedicoes.list_id(self, datas['id'])
-                if expedicoes:
-                    return expedicoes
+            datas = args.parse_args()
+            expedicoes = Expedicoes.list_id(self, datas['id'])
+            if expedicoes:
+                return jsonify(expedicoes)
             else:
-                return jsonify({'status': 400, 'msg': 'O parâmetro "id" não foi fornecido'}), 400
-
+                return jsonify({'status': 404, 'msg': 'Expedição não encontrada'}), 404
         except Exception as e:
-            print("Erro durante a busca:", e)
-            print("Tipo de erro:", type(e))
-            print("Conteúdo do erro:", e)
             return jsonify({'status': 500, 'msg': f'{e}'}), 500
 
-
-class ExpedicoesCreate(Resource):
+class ExpedicaoCreate(Resource):
     def post(self):
         try:
             datas = argumentos.parse_args()
@@ -64,7 +58,7 @@ class ExpedicoesCreate(Resource):
             return jsonify({'status': 500, 'msg': f'{e}'}), 500
 
 
-class ExpedicoesUpdate(Resource):
+class ExpedicaoUpdate(Resource):
     def put(self):
         try:
             datas = argumentos_update.parse_args()
@@ -72,8 +66,8 @@ class ExpedicoesUpdate(Resource):
             return {"message": 'Expedição atualizada com sucesso!'}, 200    
         except Exception as e:
             return jsonify({'status': 500, 'msg': f'{e}'}), 500
-       
-class ExpedicoesDelete(Resource):
+        
+class ExpedicaoDelete(Resource):
     def delete(self):
         try:
             datas = argumentos_delete.parse_args()

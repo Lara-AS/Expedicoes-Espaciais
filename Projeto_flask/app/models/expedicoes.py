@@ -16,6 +16,14 @@ class Expedicoes(db.Model):
     custo = db.Column(db.Integer, nullable = False)
     status = db.Column(db.String, nullable = False)
    
+    def list_id(self, expedicao_id):
+            try:
+                expedicoes = db.session.query(Expedicoes).filter(Expedicoes.id == expedicao_id).all()
+                expedicoes_dict = [{'id': expedicao.id, 'nome': expedicao.nome, 'data': expedicao.data.isoformat(), 'destino': expedicao.destino, 'estado': expedicao.estado,'tripulacao': expedicao.tripulacao, 'carga': expedicao.carga, 'duracao': expedicao.duracao.isoformat(), 'custo': expedicao.custo, 'status': expedicao.status} for expedicao in expedicoes]
+                return expedicoes_dict
+            except Exception as e:
+                print(e)
+
     def __init__(self, nome, data, destino, estado, tripulacao, carga, duracao, custo, status):
         self.nome = nome
         self.data = data
@@ -27,14 +35,6 @@ class Expedicoes(db.Model):
         self.custo = custo
         self.status = status
              
-    def list_id(self, expedicao_id):
-        try:
-            expedicoes = db.session.query(Expedicoes).filter(Expedicoes.id == expedicao_id).all()
-            expedicoes_dict = [{'id': expedicao.id, 'nome': expedicao.name, 'data': expedicao.data, 'destino': expedicao.destino, 'estado': expedicao.estado,'tripulacao': expedicao.tripulacao, 'carga': expedicao.carga, 'duracao': expedicao.duracao, 'custo': expedicao.custo, 'status': expedicao.status} for expedicao in expedicoes]
-            return expedicoes_dict
-        except Exception as e:
-            print(e)
-
 
     def save_expedicoes(self, nome, data, destino, estado, tripulacao, carga, duracao, custo, status):
         try:
@@ -43,7 +43,7 @@ class Expedicoes(db.Model):
             add_banco = Expedicoes(nome, date_obj, destino, estado, tripulacao, carga, date_duracao, custo, status)
             db.session.add(add_banco)
             db.session.commit()
-        except Exception as e:
+        except Exception as e:  
             print(e)
    
     def update_expedicoes(self, id, nome, data, destino, estado, tripulacao, carga, duracao, custo, status):

@@ -42,7 +42,7 @@ document.getElementById('meuFormulario').addEventListener('submit', function(eve
     });
 });
 
-document.getElementById('meuFormulario').addEventListener('submit', function(event){
+document.getElementById('meuFormulario').addEventListener('click', function(event){
     event.preventDefault();
 
     var id = document.getElementById('id').value;
@@ -70,7 +70,7 @@ document.getElementById('meuFormulario').addEventListener('submit', function(eve
     };
     console.log(dados);
 
-    // requisição AJAX
+    // requisição AJAX 
     fetch('http://127.0.0.1:2000/atualizar', {
         method: 'PUT',
         headers: {
@@ -94,7 +94,7 @@ document.getElementById('btnDeletar').addEventListener('click', function(event){
 
     var id = document.getElementById('id').value;
 
-    fetch('http://127.0.0.1:2000/deletar/' + id, {
+    fetch('http://127.0.0.1:2000/deletar' + id, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
