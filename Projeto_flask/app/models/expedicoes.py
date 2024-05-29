@@ -27,6 +27,15 @@ class Expedicoes(db.Model):
         self.custo = custo
         self.status = status
              
+    def list_id(self, expedicao_id):
+        try:
+            expedicoes = db.session.query(Expedicoes).filter(Expedicoes.id == expedicao_id).all()
+            expedicoes_dict = [{'id': expedicao.id, 'nome': expedicao.name, 'data': expedicao.data, 'destino': expedicao.destino, 'estado': expedicao.estado,'tripulacao': expedicao.tripulacao, 'carga': expedicao.carga, 'duracao': expedicao.duracao, 'custo': expedicao.custo, 'status': expedicao.status} for expedicao in expedicoes]
+            return expedicoes_dict
+        except Exception as e:
+            print(e)
+
+
     def save_expedicoes(self, nome, data, destino, estado, tripulacao, carga, duracao, custo, status):
         try:
             date_obj = datetime.strptime(data, "%Y-%m-%d").date()

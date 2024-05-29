@@ -29,9 +29,30 @@ argumentos_update.add_argument('status', type = str)
 argumentos_delete = reqparse.RequestParser()
 argumentos_delete.add_argument('id', type = int)
 
+argumentos_buscar = reqparse.RequestParser()
+argumentos.add_argument('id', type = int)
+
 class Index(Resource):
     def get(self):
         return jsonify("Bem vindo à aplicação Flask")
+
+class ExpedicaoByid(Resource):
+    def get(self):
+        try:
+            datas = argumentos_buscar.parse_args()
+            if 'id' in datas:
+                expedicoes = Expedicoes.list_id(self, datas['id'])
+                if expedicoes:
+                    return expedicoes
+            else:
+                return jsonify({'status': 400, 'msg': 'O parâmetro "id" não foi fornecido'}), 400
+
+        except Exception as e:
+            print("Erro durante a busca:", e)
+            print("Tipo de erro:", type(e))
+            print("Conteúdo do erro:", e)
+            return jsonify({'status': 500, 'msg': f'{e}'}), 500
+
 
 class ExpedicoesCreate(Resource):
     def post(self):

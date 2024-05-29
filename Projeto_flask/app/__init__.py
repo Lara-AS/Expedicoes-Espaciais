@@ -13,8 +13,9 @@ from app.models.expedicoes import Expedicoes
 with app.app_context():
     db.create_all()
    
-from app.view.reso_expedicoes import Index, ExpedicoesCreate, ExpedicoesUpdate, ExpedicoesDelete
+from app.view.reso_expedicoes import Index, ExpedicoesCreate, ExpedicoesUpdate, ExpedicoesDelete, ExpedicaoByid
 api.add_resource(Index, '/')
 api.add_resource(ExpedicoesCreate, '/criar')
 api.add_resource(ExpedicoesUpdate, '/atualizar')
 api.add_resource(ExpedicoesDelete, '/deletar')
+api.add_resource(ExpedicaoByid, '/buscar_id')

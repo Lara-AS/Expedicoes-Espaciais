@@ -21,28 +21,31 @@ document.getElementById('meuFormulario').addEventListener('submit', function(eve
         custo: custo,
         status: status
     };
-    console.log(dados)
-    // realizar requisição AJAX para a API
-    fetch('http://127.0.0.1:2000/criar',{
-        method:'POST',
-        headers:{
+    console.log(dados);
+
+    //requisição AJAX p/ a API
+    fetch('http://127.0.0.1:2000/criar', {
+        method: 'POST',
+        headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(dados)
     })
-     // tratamento da resposta da requisição
     .then(response => response.text())
-    .catch(error =>{
-        document.getElementById('resposta')
-        .innerHTML = 'Erro ao processar a requisição';
+    .then(responseText => {
+        document.getElementById('resposta').innerHTML = 'Expedição criada com sucesso!';
+        console.log("Sucesso:", responseText);
+    })
+    .catch(error => {
+        document.getElementById('resposta').innerHTML = 'Erro ao processar a requisição';
         console.error("Erro:", error);
     });
-
 });
-document.getElementById('bntAtualizar').addEventListener('click', function(event){
+
+document.getElementById('meuFormulario').addEventListener('submit', function(event){
     event.preventDefault();
 
-    var id = documents.getElementById('id').value;
+    var id = document.getElementById('id').value;
     var nome = document.getElementById('nome').value;
     var data = document.getElementById('data').value;
     var destino = document.getElementById('destino').value;
@@ -65,26 +68,45 @@ document.getElementById('bntAtualizar').addEventListener('click', function(event
         custo: custo,
         status: status
     };
-    console.log(dados)
-    // realizar requisição AJAX para a API
-    fetch('http://127.0.0.1:2000/atualizar',{
-        method:'PUT',
-        headers:{
+    console.log(dados);
+
+    // requisição AJAX
+    fetch('http://127.0.0.1:2000/atualizar', {
+        method: 'PUT',
+        headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(dados)
     })
-     // tratamento da resposta da requisição
     .then(response => response.text())
-    .catch(error =>{
-        document.getElementById('resposta')
-        .innerHTML = 'Erro ao processar a requisição';
+    .then(responseText => {
+        document.getElementById('resposta').innerHTML = 'Expedição atualizada com sucesso!';
+        console.log("Sucesso:", responseText);
+    })
+    .catch(error => {
+        document.getElementById('resposta').innerHTML = 'Erro ao processar a requisição';
         console.error("Erro:", error);
     });
 });
 
-/**var id = prompt('Insira o ID que deseja atualizar:');
-if (id) {
-    enviarDados('PUT', 'http://127.0.0.1:2000/atualizar/');
-} else {
-    alert('Insira um ID válido.');**/
+document.getElementById('btnDeletar').addEventListener('click', function(event){
+    event.preventDefault();
+
+    var id = document.getElementById('id').value;
+
+    fetch('http://127.0.0.1:2000/deletar/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.text())
+    .then(responseText => {
+        document.getElementById('resposta').innerHTML = 'Expedição deletada com sucesso!';
+        console.log("Sucesso:", responseText);
+    })
+    .catch(error => {
+        document.getElementById('resposta').innerHTML = 'Erro ao processar a requisição';
+        console.error("Erro:", error);
+    });
+});
