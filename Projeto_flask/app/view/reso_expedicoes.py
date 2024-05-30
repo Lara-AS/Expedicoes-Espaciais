@@ -32,6 +32,9 @@ argumentos_delete.add_argument('id', type = int)
 args = reqparse.RequestParser()
 args.add_argument('id', type = int)
 
+argumentos_buscar = reqparse.RequestParser()
+argumentos_buscar.add_argument('id', type=int)
+
 class Index(Resource):
     def get(self):
         return jsonify("Bem vindo à aplicação Flask")
@@ -42,9 +45,9 @@ class ExpedicaoByid(Resource):
             datas = args.parse_args()
             expedicoes = Expedicoes.list_id(self, datas['id'])
             if expedicoes:
-                return jsonify(expedicoes)
+                return (expedicoes)
             else:
-                return jsonify({'status': 404, 'msg': 'Expedição não encontrada'}), 404
+                return ({'status': 404, 'msg': 'Expedição não encontrada'}), 404
         except Exception as e:
             return jsonify({'status': 500, 'msg': f'{e}'}), 500
 
@@ -56,7 +59,6 @@ class ExpedicaoCreate(Resource):
             return {"message": 'Expedição criada com sucesso!'}, 200
         except Exception as e:
             return jsonify({'status': 500, 'msg': f'{e}'}), 500
-
 
 class ExpedicaoUpdate(Resource):
     def put(self):
@@ -75,3 +77,15 @@ class ExpedicaoDelete(Resource):
             return {"message": 'Expedição deletada com sucesso!'}, 200  
         except Exception as e:
             return jsonify({'status': 500, 'msg': f'{e}'}), 500
+
+class ExpedicaoList(Resource):
+    def get(self):
+        try:
+            expedicoes = Expedicoes.list_expedicoes()
+            return (expedicoes)
+        except Exception as e:
+            return jsonify({'status': 500, 'msg': f'Erro ao processar a requisição: {e}'}), 500
+
+
+
+#datas = argumentos_buscar.query.all()

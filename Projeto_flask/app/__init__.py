@@ -13,10 +13,11 @@ from app.models.expedicoes import Expedicoes
 with app.app_context():
     db.create_all()
    
-from app.view.reso_expedicoes import Index, ExpedicaoCreate, ExpedicaoUpdate, ExpedicaoDelete, ExpedicaoByid
+from app.view.reso_expedicoes import Index, ExpedicaoCreate, ExpedicaoUpdate, ExpedicaoDelete, ExpedicaoByid, ExpedicaoList
 api.add_resource(Index, '/')
 api.add_resource(ExpedicaoCreate, '/criar')
 api.add_resource(ExpedicaoUpdate, '/atualizar')
 api.add_resource(ExpedicaoDelete, '/deletar')
 api.add_resource(ExpedicaoByid, '/buscar_id')
+api.add_resource(ExpedicaoList, '/expedicoes')
 

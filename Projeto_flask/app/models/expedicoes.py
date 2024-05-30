@@ -34,7 +34,6 @@ class Expedicoes(db.Model):
         self.duracao = duracao
         self.custo = custo
         self.status = status
-             
 
     def save_expedicoes(self, nome, data, destino, estado, tripulacao, carga, duracao, custo, status):
         try:
@@ -61,3 +60,11 @@ class Expedicoes(db.Model):
             db.session.commit()
         except Exception as e:
             print(e)
+
+    def list_expedicoes():
+            try:
+                expedicoes = Expedicoes.query.all()
+                expedicoes_list = [{'id': expedicao.id,'nome': expedicao.nome, 'data': expedicao.data.isoformat(),'destino': expedicao.destino,'estado': expedicao.estado, 'tripulacao': expedicao.tripulacao,'carga': expedicao.carga,'duracao': expedicao.duracao.isoformat(),'custo': expedicao.custo, 'status': expedicao.status} for expedicao in expedicoes]
+                return expedicoes_list
+            except Exception as e:
+                print(e)
