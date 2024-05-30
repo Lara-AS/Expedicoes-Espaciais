@@ -61,10 +61,12 @@ class Expedicoes(db.Model):
         except Exception as e:
             print(e)
 
-    def list_expedicoes():
+    @classmethod
+    def list_expedicoes(cls):
             try:
-                expedicoes = Expedicoes.query.all()
+                expedicoes = db.session.query(cls).order_by(cls.data.desc()).all()
                 expedicoes_list = [{'id': expedicao.id,'nome': expedicao.nome, 'data': expedicao.data.isoformat(),'destino': expedicao.destino,'estado': expedicao.estado, 'tripulacao': expedicao.tripulacao,'carga': expedicao.carga,'duracao': expedicao.duracao.isoformat(),'custo': expedicao.custo, 'status': expedicao.status} for expedicao in expedicoes]
                 return expedicoes_list
             except Exception as e:
                 print(e)
+                return []

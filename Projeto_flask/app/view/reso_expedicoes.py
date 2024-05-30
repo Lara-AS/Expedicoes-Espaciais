@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask_restful import Resource, reqparse
 from app.models.expedicoes import Expedicoes
 from datetime import date
@@ -39,18 +39,6 @@ class Index(Resource):
     def get(self):
         return jsonify("Bem vindo à aplicação Flask")
 
-class ExpedicaoByid(Resource):
-    def get(self):
-        try:
-            datas = args.parse_args()
-            expedicoes = Expedicoes.list_id(self, datas['id'])
-            if expedicoes:
-                return (expedicoes)
-            else:
-                return ({'status': 404, 'msg': 'Expedição não encontrada'}), 404
-        except Exception as e:
-            return jsonify({'status': 500, 'msg': f'{e}'}), 500
-
 class ExpedicaoCreate(Resource):
     def post(self):
         try:
@@ -69,23 +57,46 @@ class ExpedicaoUpdate(Resource):
         except Exception as e:
             return jsonify({'status': 500, 'msg': f'{e}'}), 500
         
+
 class ExpedicaoDelete(Resource):
     def delete(self):
         try:
             datas = argumentos_delete.parse_args()
-            Expedicoes.delete_expedicoes(self, datas['id'])
-            return {"message": 'Expedição deletada com sucesso!'}, 200  
+            expedicao_id = datas['id']
+            expedicao = Expedicoes.query.get(expedicao_id)
+            if expedicao:
+                Expedicoes.delete_expedicoes(self, expedicao_id)
+                return {"message": 'Expedição deletada com sucesso!'}, 200
+            else:
+                return {"message": 'O ID fornecido não existe.'}, 404
+
         except Exception as e:
             return jsonify({'status': 500, 'msg': f'{e}'}), 500
+
 
 class ExpedicaoList(Resource):
     def get(self):
         try:
-            expedicoes = Expedicoes.list_expedicoes()
-            return (expedicoes)
+            datas = argumentos_buscar.parse_args()
+            expedicao_id = datas.get('id')
+            print(f'ID inserido : {expedicao_id}')
+            
+            # Se um ID foi fornecido, retornar os detalhes da expedição correspondente
+            if expedicao_id is not None:
+                expedicao = Expedicoes.query.get(expedicao_id)
+                print(f'Expedição encontrada: {expedicao}')
+                if expedicao:
+                    expedicao_list = {'id': expedicao.id,'nome': expedicao.nome, 'data': expedicao.data.isoformat(),'destino': expedicao.destino,'estado': expedicao.estado, 'tripulacao': expedicao.tripulacao,'carga': expedicao.carga,'duracao': expedicao.duracao.isoformat(),'custo': expedicao.custo, 'status': expedicao.status}
+                    return expedicao_list
+                else:
+                    return {'status': 404, 'msg': 'Expedição não encontrada'}, 404
+            
+            # Se nenhum ID foi fornecido, retornar a lista completa de expedições
+            else:
+                expedicoes = Expedicoes.query.order_by(Expedicoes.data.desc()).all()
+                expedicoes_list = [{'id': expedicao.id,'nome': expedicao.nome, 'data': expedicao.data.isoformat(),'destino': expedicao.destino,'estado': expedicao.estado, 'tripulacao': expedicao.tripulacao,'carga': expedicao.carga,'duracao': expedicao.duracao.isoformat(),'custo': expedicao.custo, 'status': expedicao.status} for expedicao in expedicoes]
+                return expedicoes_list
+
         except Exception as e:
-            return jsonify({'status': 500, 'msg': f'Erro ao processar a requisição: {e}'}), 500
+            return {'status': 500, 'msg': f'Erro ao processar a requisição: {e}'}, 500
 
-
-
-#datas = argumentos_buscar.query.all()
